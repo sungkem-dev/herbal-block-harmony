@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import WhyChoose from "@/components/WhyChoose";
@@ -8,11 +8,15 @@ import Compliance from "@/components/Compliance";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
 import AnimatedBackground from "@/components/AnimatedBackground";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const sectionsRef = useRef<HTMLElement[]>([]);
 
   useEffect(() => {
+    if (isLoading) return;
+
     // Smooth scroll behavior
     document.documentElement.style.scrollBehavior = "smooth";
 
@@ -52,7 +56,11 @@ const Index = () => {
       observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [isLoading]);
+
+  if (isLoading) {
+    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
